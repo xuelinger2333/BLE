@@ -7,6 +7,8 @@
   <string name="next">Next</string>
   <string name="previous">Previous</string>
 
+  <string name="message_prompt">Problem Aspects </string>
+
   <string name="title_activity_console">ConsoleActivity</string>
   <string name="refresh">Refresh</string>
   <string name="no_device_found">No device found</string>

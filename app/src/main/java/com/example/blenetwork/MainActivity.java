@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -85,10 +86,11 @@ public class MainActivity extends AppCompatActivity {
         .setNeutralButton("Cancel", null)
         .setPositiveButton("Send", (dialogInterface, i) -> {
           String message_text = ((EditText)dialog_view.findViewById(R.id.message_text)).getText().toString();
+          String message_type = ((Spinner)dialog_view.findViewById(R.id.spinner_rank)).getSelectedItem().toString();
           if (send_as_verified[0]) {
-            BLEN_adapter.broadcastVerifiedMessage(message_text);
+            BLEN_adapter.broadcastVerifiedMessage(message_type + ":" + message_text);
           } else {
-            BLEN_adapter.broadcastMessage(message_text);
+            BLEN_adapter.broadcastMessage(message_type + ":" + message_text);
           }
         })
         .setView(dialog_view)

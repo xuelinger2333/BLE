@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="data">
+        <item>倔强青铜</item>
+        <item>秩序白银</item>
+        <item>荣耀黄金</item>
+        <item>尊贵铂金</item>
+        <item>永恒钻石</item>
+        <item>至尊星耀</item>
+        <item>最强王者</item>
+        <item>荣耀王者</item>
+    </string-array>
+</resources>
