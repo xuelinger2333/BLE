@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Main</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+		<script>
+			function appendLog(mes, html = false) {
+				let node = document.createElement("li");
+				if (html) node.innerHTML = mes;
+				else node.innerText = mes;
+				document.getElementById("logs-list").appendChild(node);
+			}
+
+			function broadcast() {
+				let mes = prompt("Message:");
+				if (mes) Android.broadcastMessage(mes);
+			}
+			
+			function clearConsole() {
+				document.getElementById("logs-list").innerHTML = "";
+				Android.clearConsole();
+			}
+		</script>
+		<style>
+			ul {
+				padding-left: 0;
+				font-size: 14px;
+				font-family: monospace;
+			}
+			li {
+				list-style-type: none;
+			}
+		</style>
+	</head>
+	<body>
+		<button onclick="broadcast();">Broadcast</button>
+		<button onclick="Android.showDeviceList();">Devices</button>
+		<button onclick="Android.doScan();">Scan</button>
+		<button onclick="Android.startServer();">Toggle Advertising</button>
+		<button onclick="clearConsole();">Clear</button> <br>
+		<ul id="logs-list"></ul>
+	</body>
+</html>
