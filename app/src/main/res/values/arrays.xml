@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="data">
-        <item>倔强青铜</item>
-        <item>秩序白银</item>
-        <item>荣耀黄金</item>
-        <item>尊贵铂金</item>
-        <item>永恒钻石</item>
-        <item>至尊星耀</item>
-        <item>最强王者</item>
-        <item>荣耀王者</item>
+        <item>社会服务</item>
+        <item>公共卫生</item>
+        <item>公共交通</item>
+        <item>餐饮服务</item>
+        <item>基础设施</item>
+        <item>生态环境</item>
+        <item>其他</item>
     </string-array>
 </resources>
