@@ -10,12 +10,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     final boolean[] send_as_verified = {true};
     View dialog_view = View.inflate(this, R.layout.broadcast_dialog, null);
+    //View main_view = View.inflate(this, R.layout.activity_main, null);
     if (BLEN_adapter.cert_setup) {
       ((SwitchCompat)dialog_view.findViewById(R.id.message_verified_switch)).setOnCheckedChangeListener(
           (compoundButton, b) -> send_as_verified[0] = b
@@ -87,10 +90,17 @@ public class MainActivity extends AppCompatActivity {
         .setPositiveButton("Send", (dialogInterface, i) -> {
           String message_text = ((EditText)dialog_view.findViewById(R.id.message_text)).getText().toString();
           String message_type = ((Spinner)dialog_view.findViewById(R.id.spinner_rank)).getSelectedItem().toString();
+          //String display_type = ((Spinner)main_view.findViewById(R.id.spinner_display)).getSelectedItem().toString();
+          Spinner spinner = findViewById(R.id.spinner_display);
+          String display_type = spinner.getSelectedItem().toString();
           if (send_as_verified[0]) {
-            BLEN_adapter.broadcastVerifiedMessage(message_type + ":" + message_text);
+            BLEN_adapter.broadcastVerifiedMessage(
+                    display_type + "_" +
+                    message_type + ":" + message_text);
           } else {
-            BLEN_adapter.broadcastMessage(message_type + ":" + message_text);
+            BLEN_adapter.broadcastMessage(
+                    display_type + "_" +
+                    message_type + ":" + message_text);
           }
         })
         .setView(dialog_view)
@@ -115,9 +125,26 @@ public class MainActivity extends AppCompatActivity {
       rv_message.scrollToPosition(message_list.size() - 1);
     });
 
+    //deal with different message types
+    String text = new String(mes.payload, StandardCharsets.UTF_8);
+    String type = "MESSAGE";
+    int pivot = 0;
+    while (pivot < text.length() && text.charAt(pivot) != '_') {
+        pivot += 1;
+    }
+    type = text.substring(0, pivot);
+    pivot += 1;
+    text = text.substring(pivot);
+    switch(type) {
+      case "ALERT":
+        showAlertDialogue(text);
+        break;
+      case "bar":
+        break;
+    }
     // Automatic reply
 
-    String text = new String(mes.payload, StandardCharsets.UTF_8);
+
     final int[] count = {0};
     if (text.equals("start") && mes.sender_uuid == BLEN_adapter.getID()) {
       timer = new Timer();
@@ -215,6 +242,16 @@ public class MainActivity extends AppCompatActivity {
       }
     }*/
   };
+
+  private void showAlertDialogue(String text) {
+    View view = LayoutInflater.from(this).inflate(R.layout.alert_dialogue, null);
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setMessage(text)
+            .setTitle(R.string.alert_title)
+            .setView(view)
+            .create()
+            .show();
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

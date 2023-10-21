@@ -31,12 +31,26 @@
 <!--        app:layout_constraintEnd_toEndOf="@+id/textView"/>-->
   </androidx.constraintlayout.widget.ConstraintLayout>
 
+  <Spinner
+      android:id="@+id/spinner_display"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="16dp"
+      android:background="@drawable/selector_for_custom_spinner"
+      android:entries="@array/type"
+      android:prompt="@string/message_type"
+      android:spinnerMode="dialog"
+      android:text="Display"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/button_send_message"
+      app:layout_constraintStart_toStartOf="parent" />
+
   <com.google.android.material.button.MaterialButton
       android:id="@+id/button_send_message"
       style="@style/Widget.MaterialComponents.Button.Icon"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="10dp"
+      android:layout_marginBottom="8dp"
       android:text="Broadcast"
       app:icon="@drawable/ic_baseline_sms_24"
       app:iconGravity="textStart"
@@ -48,10 +62,10 @@
       android:id="@+id/fab_console"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="8dp"
       android:layout_marginBottom="10dp"
       app:fabSize="mini"
       app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/fab_devices"
       app:layout_constraintLeft_toLeftOf="parent"
       app:maxImageSize="20dp"
       app:srcCompat="@drawable/ic_baseline_info_24" />
@@ -73,10 +87,10 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginBottom="70dp"
-      app:layout_constraintBottom_toBottomOf="parent"
-      tools:layout_editor_absoluteX="1dp"
+      android:scrollbars="vertical"
       app:layoutManager="LinearLayoutManager"
-      android:scrollbars="vertical" >
+      app:layout_constraintBottom_toBottomOf="parent"
+      tools:layout_editor_absoluteX="1dp">
 
   </androidx.recyclerview.widget.RecyclerView>
 

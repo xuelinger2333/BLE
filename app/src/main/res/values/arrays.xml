@@ -8,5 +8,11 @@
         <item>基础设施</item>
         <item>生态环境</item>
         <item>其他</item>
+        <item> </item>
+    </string-array>
+    <string-array name="type">
+        <item>MESSAGE</item>
+        <item>SURVEY</item>
+        <item>ALERT</item>
     </string-array>
 </resources>

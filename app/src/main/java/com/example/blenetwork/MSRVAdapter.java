@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.Random;
 
 class MessageViewHolder extends RecyclerView.ViewHolder {
-  TextView content, sender, time;
+    TextView content, sender, time;
   CardView container;
   MessageViewHolder(View view) {
     super(view);
@@ -61,7 +61,16 @@ public class MSRVAdapter extends RecyclerView.Adapter<MessageViewHolder> {
   @Override
   public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
     BLENMessage message = message_list.get(position);
-    holder.content.setText(new String(message.payload, StandardCharsets.UTF_8));
+    String text = new String(message.payload, StandardCharsets.UTF_8);
+    String type = "MESSAGE";
+    int i = 0;
+    while (text.charAt(i) != '_') {
+      i += 1;
+    }
+    type = text.substring(0, i);
+    i += 1;
+    text = text.substring(i);
+    holder.content.setText(text);
     holder.sender.setText(EmojiName.getName(message.sender_uuid));
     if (message.isVerified()) {
       holder.sender.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.baseline_verified_12, 0);
