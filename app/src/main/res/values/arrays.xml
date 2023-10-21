@@ -13,6 +13,7 @@
     <string-array name="type">
         <item>MESSAGE</item>
         <item>SURVEY</item>
+        <item>RANK</item>
         <item>ALERT</item>
     </string-array>
 </resources>
