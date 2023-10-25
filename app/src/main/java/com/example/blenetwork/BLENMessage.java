@@ -65,6 +65,27 @@ class BLENMessage {
     return getBodyBytes();
   }
 
+  public String getTextType(){
+    String text = new String(this.payload, StandardCharsets.UTF_8);
+    String type = "MESSAGE";
+    int pivot = 0;
+    while (pivot < text.length() && text.charAt(pivot) != '_') {
+      pivot += 1;
+    }
+    return text.substring(0, pivot);
+  }
+
+  public String getText(){
+    String text = new String(this.payload, StandardCharsets.UTF_8);
+    String type = "MESSAGE";
+    int pivot = 0;
+    while (pivot < text.length() && text.charAt(pivot) != '_') {
+      pivot += 1;
+    }
+    pivot += 1;
+    return text = text.substring(pivot);
+  }
+
   public boolean isVerified() {
     return (type & TYPE_VERIFIED) != 0;
   }

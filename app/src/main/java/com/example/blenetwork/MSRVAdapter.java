@@ -1,24 +1,34 @@
 package com.example.blenetwork;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Random;
 
 class MessageViewHolder extends RecyclerView.ViewHolder {
-    TextView content, sender, time;
+    TextView content, sender, time, type;
   CardView container;
   MessageViewHolder(View view) {
     super(view);
@@ -26,25 +36,73 @@ class MessageViewHolder extends RecyclerView.ViewHolder {
     sender = view.findViewById(R.id.message_sender);
     time = view.findViewById(R.id.message_time);
     container = view.findViewById(R.id.message_container);
-
-    view.setOnClickListener(view1 -> {
-      PopupMenu popupMenu = new PopupMenu(view1.getContext(), view1);
-      popupMenu.getMenuInflater().inflate(R.menu.message_menu, popupMenu.getMenu());
-      popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-          if (item.getItemId() == R.id.block_sender) {
-            return true;
-          } else if (item.getItemId() == R.id.reply) {
+    type = view.findViewById(R.id.message_type);
+      view.setOnClickListener(view1 -> {
+        PopupMenu popupMenu = new PopupMenu(view1.getContext(), view1);
+        popupMenu.getMenuInflater().inflate(R.menu.message_menu, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+          @Override
+          public boolean onMenuItemClick(MenuItem item) {
+            if (item.getItemId() == R.id.rate) {
+              //rate_message(view1.getContext());
+              return true;
+            } else if (item.getItemId() == R.id.reply) {
+              reply_message(view1.getContext());
+              return true;
+            }else if (item.getItemId() == R.id.complain) {
+              reply_message(view1.getContext());
+              return true;
+            }
             return true;
           }
-          return true;
-        }
+        });
+        popupMenu.show();
       });
-      popupMenu.show();
-    });
+    }
+
+  private void reply_message(Context context) {
+    BLENAdapter BLEN_adapter = MainActivity.BLEN_adapter;
+      if (BLEN_adapter == null) {
+        return;
+      }
+
+      final boolean[] send_as_verified = {true};
+      View dialog_view = View.inflate(context, R.layout.reply_dialogue, null);
+      if (BLEN_adapter.cert_setup) {
+        ((SwitchCompat)dialog_view.findViewById(R.id.message_verified_switch)).setOnCheckedChangeListener(
+                (compoundButton, b) -> send_as_verified[0] = b
+        );
+      } else {
+        dialog_view.findViewById(R.id.message_verified_switch).setVisibility(View.GONE);
+      }
+
+      new MaterialAlertDialogBuilder(context)
+              .setTitle("Reply:")
+              .setNeutralButton("Cancel", null)
+              .setPositiveButton("Send", (dialogInterface, i) -> {
+                String message_text = ((EditText)dialog_view.findViewById(R.id.message_text)).getText().toString();
+                //String message_type = ((Spinner)dialog_view.findViewById(R.id.spinner_rank)).getSelectedItem().toString();
+                String message_type = "Reply to : " + this.type.getText() + this.content.getText() ;
+                String display_type = "MESSAGE";
+                if (send_as_verified[0]) {
+                  BLEN_adapter.broadcastVerifiedMessage(
+                          display_type + "_" +
+                                  message_type + "\n" + message_text);
+                } else {
+                  BLEN_adapter.broadcastMessage(
+                          display_type + "_" +
+                                  message_type + "\n" + message_text);
+                }
+              })
+              .setView(dialog_view)
+              .show();
   }
-}
+
+  public void setClick(boolean flag){
+    this.itemView.setClickable(flag);
+    }
+  }
+
 
 public class MSRVAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
@@ -61,17 +119,16 @@ public class MSRVAdapter extends RecyclerView.Adapter<MessageViewHolder> {
   @Override
   public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
     BLENMessage message = message_list.get(position);
-    String text = new String(message.payload, StandardCharsets.UTF_8);
-    String type = "MESSAGE";
-    int i = 0;
-    while (text.charAt(i) != '_') {
-      i += 1;
-    }
-    type = text.substring(0, i);
-    i += 1;
-    text = text.substring(i);
+    String text = message.getText();
+    String type = message.getTextType();
     holder.content.setText(text);
     holder.sender.setText(EmojiName.getName(message.sender_uuid));
+    holder.type.setText(type + "·");
+    if (Objects.equals(type, "SURVEY") || Objects.equals(type, "RANK")){
+      holder.setClick(true);
+    }else{
+      holder.setClick(false);
+    }
     if (message.isVerified()) {
       holder.sender.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.baseline_verified_12, 0);
     } else {
@@ -81,7 +138,7 @@ public class MSRVAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     long sec_diff = new Date().getTime() / 1000 - message.timestamp;
     String time_text = "";
     if (sec_diff < 20) time_text = "Just now";
-    else if (sec_diff < 60) time_text = "Less than a minute ago";
+    else if (sec_diff < 60) time_text = "Less than 1 min ago";
     else if (sec_diff < 120) time_text = "1 min ago";
     else time_text = (sec_diff / 60) + " mins ago";
 
@@ -91,7 +148,7 @@ public class MSRVAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     else if (distance == 1) distance_text = "From connected device";
     else distance_text = "Through " + distance + " devices";
 
-    String display_text = distance_text + " · " + time_text;
+    String display_text = distance_text + "·" + time_text;
     holder.time.setText(display_text);
 
     Random generator = new Random(message.sender_uuid);
@@ -107,4 +164,5 @@ public class MSRVAdapter extends RecyclerView.Adapter<MessageViewHolder> {
   MSRVAdapter(ArrayList<BLENMessage> message_list) {
     this.message_list = message_list;
   }
+
 }

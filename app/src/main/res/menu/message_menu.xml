@@ -5,6 +5,9 @@
       android:title="Reply" />
 
   <item
-      android:id="@+id/block_sender"
-      android:title="Block sender" />
+      android:id="@+id/rate"
+      android:title="Rate" />
+  <item
+      android:id="@+id/complain"
+      android:title="Complain" />
 </menu>

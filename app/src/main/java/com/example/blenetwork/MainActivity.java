@@ -11,14 +11,18 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -43,7 +47,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
-  public BLENAdapter BLEN_adapter;
+  public static BLENAdapter BLEN_adapter;
   private Intent BLEN_intent;
 
   @Override
@@ -75,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
 
     final boolean[] send_as_verified = {true};
     View dialog_view = View.inflate(this, R.layout.broadcast_dialog, null);
-    //View main_view = View.inflate(this, R.layout.activity_main, null);
     if (BLEN_adapter.cert_setup) {
       ((SwitchCompat)dialog_view.findViewById(R.id.message_verified_switch)).setOnCheckedChangeListener(
           (compoundButton, b) -> send_as_verified[0] = b
@@ -90,17 +93,16 @@ public class MainActivity extends AppCompatActivity {
         .setPositiveButton("Send", (dialogInterface, i) -> {
           String message_text = ((EditText)dialog_view.findViewById(R.id.message_text)).getText().toString();
           String message_type = ((Spinner)dialog_view.findViewById(R.id.spinner_rank)).getSelectedItem().toString();
-          //String display_type = ((Spinner)main_view.findViewById(R.id.spinner_display)).getSelectedItem().toString();
           Spinner spinner = findViewById(R.id.spinner_display);
           String display_type = spinner.getSelectedItem().toString();
           if (send_as_verified[0]) {
             BLEN_adapter.broadcastVerifiedMessage(
                     display_type + "_" +
-                    message_type + ":" + message_text);
+                    message_type + "\n" + message_text);
           } else {
             BLEN_adapter.broadcastMessage(
                     display_type + "_" +
-                    message_type + ":" + message_text);
+                    message_type + "\n" + message_text);
           }
         })
         .setView(dialog_view)
@@ -126,15 +128,8 @@ public class MainActivity extends AppCompatActivity {
     });
 
     //deal with different message types
-    String text = new String(mes.payload, StandardCharsets.UTF_8);
-    String type = "MESSAGE";
-    int pivot = 0;
-    while (pivot < text.length() && text.charAt(pivot) != '_') {
-        pivot += 1;
-    }
-    type = text.substring(0, pivot);
-    pivot += 1;
-    text = text.substring(pivot);
+    String text = mes.getText();
+    String type = mes.getTextType();
     switch(type) {
       case "ALERT":
         showAlertDialogue(text);
@@ -263,6 +258,13 @@ public class MainActivity extends AppCompatActivity {
     rv_message.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
     rv_message.setAdapter(MSRV_adapter = new MSRVAdapter(message_list));
 
+    //i dont know how to write things left QAQ
+    Button button = new Button(this);
+    button.setText("Select");
+    button.setTextSize(18);
+    getSupportActionBar().setDisplayShowCustomEnabled(true);
+    getSupportActionBar().setCustomView(button);
+
     if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
       // For SDK version 30 or lower
       if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED
@@ -319,10 +321,13 @@ public class MainActivity extends AppCompatActivity {
     console_intent = new Intent(MainActivity.this, ConsoleActivity.class);
     device_list_intent = new Intent(MainActivity.this, DeviceList.class);
 
+
     FloatingActionButton fab_console = findViewById(R.id.fab_console);
     fab_console.setOnClickListener(v -> showConsole());
+
     FloatingActionButton fab_devices = findViewById(R.id.fab_devices);
     fab_devices.setOnClickListener(v -> showDeviceList());
+
     MaterialButton button_send_message = findViewById(R.id.button_send_message);
     button_send_message.setOnClickListener(v -> sendMessage());
   }
