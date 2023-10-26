@@ -19,4 +19,11 @@
         <item>RANK</item>
         <item>ALERT</item>
     </string-array>
+    <string-array name="type_all">
+        <item>ALL</item>
+        <item>MESSAGE</item>
+        <item>SURVEY</item>
+        <item>RANK</item>
+        <item>ALERT</item>
+    </string-array>
 </resources>

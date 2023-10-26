@@ -31,6 +31,19 @@
     <!--        app:layout_constraintEnd_toEndOf="@+id/textView"/>-->
   </androidx.constraintlayout.widget.ConstraintLayout>
 
+  <Spinner
+      android:id="@+id/spinner_select"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="10dp"
+      android:entries="@array/type_all"
+      android:prompt="@string/select_type"
+      android:spinnerMode="dialog"
+      android:text="Display"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
   <androidx.appcompat.widget.SwitchCompat
       android:id="@+id/user_admin_switch"
       android:layout_width="0dp"

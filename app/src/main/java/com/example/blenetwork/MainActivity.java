@@ -13,12 +13,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -126,11 +128,13 @@ public class MainActivity extends AppCompatActivity {
     adapterForSpinner = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item, listForSpinner);
     adapterForSpinner.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
     spinner.setAdapter(adapterForSpinner);
-
   }
 
   RecyclerView rv_message;
   ArrayList<BLENMessage> message_list = new ArrayList<>();
+  ArrayList<BLENMessage> message_pool = new ArrayList<>();
+
+  Map<String, ArrayList<BLENMessage> > message_dictionary = new HashMap<String, ArrayList<BLENMessage>>();
   MSRVAdapter MSRV_adapter;
   private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
   private final TreeMap<Long, Long> records = new TreeMap<>();
@@ -138,7 +142,14 @@ public class MainActivity extends AppCompatActivity {
   private Timer timer;
 
   private final BLENService.BLENServiceListener addMessage = mes -> {
-    message_list.add(mes);
+    message_pool.add(mes);
+    message_dictionary.get("ALL").add(mes);
+    String type = mes.getTextType();
+
+    if (message_dictionary.containsKey(type)){
+      message_dictionary.get(type).add(mes);
+    }
+    Log.d("list", String.valueOf(message_list.size()));
     mes.time_received = new Date().getTime(); // For debug only
 
     // Update UI
@@ -149,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
 
     //deal with different message types
     String text = mes.getText();
-    String type = mes.getTextType();
     switch(type) {
       case "ALERT":
         showAlertDialogue(text);
@@ -271,11 +281,15 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.activity_main);
+    message_dictionary.put("MESSAGE", new ArrayList<BLENMessage>());
+    message_dictionary.put("SURVEY", new ArrayList<BLENMessage>());
+    message_dictionary.put("RANK", new ArrayList<BLENMessage>());
+    message_dictionary.put("ALERT", new ArrayList<BLENMessage>());
+    message_dictionary.put("ALL", new ArrayList<BLENMessage>());
 
     rv_message = findViewById(R.id.recycler_view_message);
     rv_message.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-    rv_message.setAdapter(MSRV_adapter = new MSRVAdapter(message_list));
-
+    rv_message.setAdapter(MSRV_adapter = new MSRVAdapter(message_dictionary.get("ALL")));
 
     if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
       // For SDK version 30 or lower
@@ -346,6 +360,20 @@ public class MainActivity extends AppCompatActivity {
     SwitchCompat switchCompat = findViewById(R.id.user_admin_switch);
     // 为 switchCompat 添加点击事件监听器
     switchCompat.setOnCheckedChangeListener((CompoundButton compoundButton, boolean isChecked) -> changeUserAdmin(compoundButton, isChecked));
+
+    Spinner spinner_select = findViewById(R.id.spinner_select);
+    spinner_select.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        List<String> listForSpinner = new ArrayList<>();
+        listForSpinner = List.of(getResources().getStringArray(R.array.type_all));
+        String selection = listForSpinner.get(pos);
+        rv_message.setAdapter(MSRV_adapter = new MSRVAdapter(message_dictionary.get(selection)));
+      }
+      @Override
+      public void onNothingSelected(AdapterView<?> parent) {
+      }
+    });
   }
 
   @Override
