@@ -45,11 +45,11 @@ class MessageViewHolder extends RecyclerView.ViewHolder {
 
   public void setClickListener() {
       View view = this.itemView;
+      String type = (String) this.type.getText();
+      if (menuMap.containsKey(type) == true){
+        Log.d("message", "yes");
       view.setOnClickListener(view1 -> {
         PopupMenu popupMenu = new PopupMenu(view1.getContext(), view1);
-        //Log.d("message", (String) this.type.getText());
-        String type = (String) this.type.getText();
-        if (menuMap.containsKey(type) == true){
         popupMenu.getMenuInflater().inflate(menuMap.get(type), popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
           @Override
@@ -70,9 +70,11 @@ class MessageViewHolder extends RecyclerView.ViewHolder {
             return true;
           }
         });
-        popupMenu.show();
+        popupMenu.show();});
+        }else{
+          view.setClickable(false);
         }
-      });
+
     }
 
   private void reply_message(Context context) {
@@ -146,9 +148,13 @@ public class MSRVAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
   @Override
   public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
+
     holder.menuMap.put("SURVEY", R.menu.survey_menu);
     holder.menuMap.put("RANK", R.menu.survey_menu);
-    holder.menuMap.put("MESSAGE", R.menu.message_menu);
+    if (MainActivity.iUserAdimin == true)
+      holder.menuMap.put("MESSAGE", R.menu.message_menu);
+    else
+      holder.menuMap.remove("MESSAGE");
    // holder.menuMap.put("ALERT", R.menu.survey_menu);
 
     BLENMessage message = message_list.get(position);

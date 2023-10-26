@@ -11,39 +11,50 @@
       android:layout_height="wrap_content"
       android:layout_marginBottom="72dp"
       app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintLeft_toLeftOf="parent"
-      app:layout_constraintRight_toRightOf="parent"
-      app:layout_constraintHorizontal_bias="0.5">
+      app:layout_constraintRight_toRightOf="parent">
 
-<!--    <TextView-->
-<!--        android:id="@+id/textView"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Nearby: 🐷😄💊😢 (Library Management)                   "/>-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/textView"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="Nearby: 🐷😄💊😢 (Library Management)                   "/>-->
 
-<!--    <TextView-->
-<!--        android:id="@+id/textView2"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Message"-->
-<!--        android:textColor="#2196F3"-->
-<!--        android:textStyle="bold"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/textView"/>-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/textView2"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="Message"-->
+    <!--        android:textColor="#2196F3"-->
+    <!--        android:textStyle="bold"-->
+    <!--        app:layout_constraintEnd_toEndOf="@+id/textView"/>-->
   </androidx.constraintlayout.widget.ConstraintLayout>
 
+  <androidx.appcompat.widget.SwitchCompat
+      android:id="@+id/user_admin_switch"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_margin="0dp"
+      android:layout_marginEnd="14dp"
+      android:checked="false"
+      android:text="Switch to Adimin"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
   <Spinner
       android:id="@+id/spinner_display"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginBottom="16dp"
       android:background="@drawable/selector_for_custom_spinner"
-      android:entries="@array/type"
+      android:entries="@array/type_user"
       android:prompt="@string/message_type"
       android:spinnerMode="dialog"
       android:text="Display"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toStartOf="@+id/button_send_message"
-      app:layout_constraintStart_toStartOf="parent" />
+      app:layout_constraintStart_toStartOf="parent"
+      />
 
   <com.google.android.material.button.MaterialButton
       android:id="@+id/button_send_message"
@@ -86,10 +97,12 @@
       android:id="@+id/recycler_view_message"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:layout_marginTop="40dp"
       android:layout_marginBottom="70dp"
       android:scrollbars="vertical"
       app:layoutManager="LinearLayoutManager"
       app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
       tools:layout_editor_absoluteX="1dp">
 
   </androidx.recyclerview.widget.RecyclerView>

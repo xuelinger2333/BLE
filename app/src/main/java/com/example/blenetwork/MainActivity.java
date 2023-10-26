@@ -13,10 +13,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +39,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
   public static BLENAdapter BLEN_adapter;
   private Intent BLEN_intent;
 
+  public static boolean iUserAdimin = false;
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                          @NonNull int[] grantResults) {
@@ -109,6 +114,21 @@ public class MainActivity extends AppCompatActivity {
         .show();
   }
 
+  private void changeUserAdmin(CompoundButton compoundButton, boolean isChecked){
+    iUserAdimin = isChecked;
+    Spinner spinner = findViewById(R.id.spinner_display);
+    List<String> listForSpinner = new ArrayList<>();
+    ArrayAdapter<String> adapterForSpinner;
+    if (iUserAdimin == false)
+      listForSpinner = List.of(getResources().getStringArray(R.array.type_user));
+    else
+      listForSpinner = List.of(getResources().getStringArray(R.array.type_admin));
+    adapterForSpinner = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item, listForSpinner);
+    adapterForSpinner.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+    spinner.setAdapter(adapterForSpinner);
+
+  }
+
   RecyclerView rv_message;
   ArrayList<BLENMessage> message_list = new ArrayList<>();
   MSRVAdapter MSRV_adapter;
@@ -138,8 +158,6 @@ public class MainActivity extends AppCompatActivity {
         break;
     }
     // Automatic reply
-
-
     final int[] count = {0};
     if (text.equals("start") && mes.sender_uuid == BLEN_adapter.getID()) {
       timer = new Timer();
@@ -258,12 +276,6 @@ public class MainActivity extends AppCompatActivity {
     rv_message.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
     rv_message.setAdapter(MSRV_adapter = new MSRVAdapter(message_list));
 
-    //i dont know how to write things left QAQ
-    Button button = new Button(this);
-    button.setText("Select");
-    button.setTextSize(18);
-    getSupportActionBar().setDisplayShowCustomEnabled(true);
-    getSupportActionBar().setCustomView(button);
 
     if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
       // For SDK version 30 or lower
@@ -330,6 +342,10 @@ public class MainActivity extends AppCompatActivity {
 
     MaterialButton button_send_message = findViewById(R.id.button_send_message);
     button_send_message.setOnClickListener(v -> sendMessage());
+
+    SwitchCompat switchCompat = findViewById(R.id.user_admin_switch);
+    // 为 switchCompat 添加点击事件监听器
+    switchCompat.setOnCheckedChangeListener((CompoundButton compoundButton, boolean isChecked) -> changeUserAdmin(compoundButton, isChecked));
   }
 
   @Override

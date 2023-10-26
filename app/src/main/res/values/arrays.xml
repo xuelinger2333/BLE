@@ -10,7 +10,10 @@
         <item>其他</item>
         <item> </item>
     </string-array>
-    <string-array name="type">
+    <string-array name="type_user">
+        <item>MESSAGE</item>
+    </string-array>
+    <string-array name="type_admin">
         <item>MESSAGE</item>
         <item>SURVEY</item>
         <item>RANK</item>
