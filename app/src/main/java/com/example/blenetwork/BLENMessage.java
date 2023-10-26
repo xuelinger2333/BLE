@@ -72,7 +72,11 @@ class BLENMessage {
     while (pivot < text.length() && text.charAt(pivot) != '_') {
       pivot += 1;
     }
-    return text.substring(0, pivot);
+    if (pivot >= text.length()){
+      return "";
+    }
+    else
+      return text.substring(0, pivot);
   }
 
   public String getText(){
@@ -83,7 +87,11 @@ class BLENMessage {
       pivot += 1;
     }
     pivot += 1;
-    return text = text.substring(pivot);
+    if (pivot >= text.length()){
+      return text;
+    }
+    else
+      return text = text.substring(pivot);
   }
 
   public boolean isVerified() {
