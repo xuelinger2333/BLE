@@ -44,6 +44,15 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
+  <TextView
+      android:id="@+id/sum_message"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Total 0 message"
+      app:layout_constraintBottom_toTopOf="@+id/recycler_view_message"
+      app:layout_constraintStart_toEndOf="@id/spinner_select"
+      app:layout_constraintTop_toTopOf="parent" />
+
   <androidx.appcompat.widget.SwitchCompat
       android:id="@+id/user_admin_switch"
       android:layout_width="0dp"

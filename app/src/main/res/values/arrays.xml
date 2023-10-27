@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="data">
-        <item>社会服务</item>
-        <item>公共卫生</item>
-        <item>公共交通</item>
-        <item>餐饮服务</item>
-        <item>基础设施</item>
-        <item>生态环境</item>
-        <item>其他</item>
+        <item>Social Service</item>
+        <item>F&amp;B service</item>
+        <item>Transportation</item>
+        <item>Sanitation</item>
+        <item>Infrastructure</item>
+        <item>Environment</item>
+        <item>Others</item>
         <item> </item>
     </string-array>
     <string-array name="type_user">
