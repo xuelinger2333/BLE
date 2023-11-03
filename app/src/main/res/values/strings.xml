@@ -8,6 +8,7 @@
   <string name="previous">Previous</string>
 
   <string name="message_prompt">Problem Aspects </string>
+  <string name="department_prompt">Receiving Department</string>
   <string name="message_type">Broadcast Type </string>
   <string name="select_type">Select Type </string>
   <string name="alert_title">Emergency Message </string>

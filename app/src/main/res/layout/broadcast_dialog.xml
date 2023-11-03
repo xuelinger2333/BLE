@@ -28,6 +28,30 @@
       app:layout_constraintStart_toStartOf="@+id/message_text"
       app:layout_constraintTop_toBottomOf="@+id/message_text" />
 
+  <TextView
+      android:id="@+id/department"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:text="Department:"
+      android:textAppearance="@style/TextAppearance.AppCompat.Large"
+      android:textSize="16sp"
+      app:layout_constraintStart_toStartOf="@id/message_text"
+      app:layout_constraintTop_toBottomOf="@id/name" />
+
+  <Spinner
+      android:id="@+id/spinner_department"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:entries="@array/department"
+      android:prompt="@string/department_prompt"
+      android:spinnerMode="dialog"
+      android:text="Choose Receive Department"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/department" />
+
+
   <Spinner
       android:id="@+id/spinner_rank"
       android:layout_width="0dp"
@@ -37,7 +61,7 @@
       android:prompt="@string/message_prompt"
       android:spinnerMode="dialog"
       android:text="Choose Message Types"
-      app:layout_constraintEnd_toEndOf="@+id/message_text"
+      app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/message_text" />
 
   <androidx.appcompat.widget.SwitchCompat
@@ -54,7 +78,7 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/spinner_rank"
+      app:layout_constraintTop_toBottomOf="@id/spinner_department"
       app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

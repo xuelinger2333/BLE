@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -100,16 +101,19 @@ public class MainActivity extends AppCompatActivity {
         .setPositiveButton("Send", (dialogInterface, i) -> {
           String message_text = ((EditText)dialog_view.findViewById(R.id.message_text)).getText().toString();
           String message_type = ((Spinner)dialog_view.findViewById(R.id.spinner_rank)).getSelectedItem().toString();
+          String receiving_department = ((Spinner)dialog_view.findViewById(R.id.spinner_department)).getSelectedItem().toString();
           Spinner spinner = findViewById(R.id.spinner_display);
           String display_type = spinner.getSelectedItem().toString();
           if (send_as_verified[0]) {
             BLEN_adapter.broadcastVerifiedMessage(
                     display_type + "_" +
-                    message_type + "\n" + message_text);
+                            receiving_department + "/" +
+                    message_type + "\n" + receiving_department + ":\n" + message_text);
           } else {
             BLEN_adapter.broadcastMessage(
                     display_type + "_" +
-                    message_type + "\n" + message_text);
+                            receiving_department + "/" +
+                    message_type + "\n" + "To " + receiving_department + ":\n" + message_text);
           }
         })
         .setView(dialog_view)
@@ -144,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
   private final BLENService.BLENServiceListener addMessage = mes -> {
     message_pool.add(mes);
     message_dictionary.get("ALL").add(mes);
-    String type = mes.getTextType();
+    String type = mes.getTextDepartment();
 
     if (message_dictionary.containsKey(type)){
       message_dictionary.get(type).add(mes);
@@ -275,16 +279,30 @@ public class MainActivity extends AppCompatActivity {
             .create()
             .show();
   }
+  private void changeSumText(String selection){
+    TextView sum_up = findViewById(R.id.sum_message);
+    String sum;
+    if (message_dictionary.get(selection).size() <= 1)
+      sum = "Total " + message_dictionary.get(selection).size() + " message";
+    else
+      sum = "Total " + message_dictionary.get(selection).size() + " messages";
+    sum_up.setText(sum);
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.activity_main);
-    message_dictionary.put("MESSAGE", new ArrayList<BLENMessage>());
-    message_dictionary.put("SURVEY", new ArrayList<BLENMessage>());
-    message_dictionary.put("RANK", new ArrayList<BLENMessage>());
-    message_dictionary.put("ALERT", new ArrayList<BLENMessage>());
+    message_dictionary.put("Mayor's Office", new ArrayList<BLENMessage>());
+    message_dictionary.put("City Council", new ArrayList<BLENMessage>());
+    message_dictionary.put("Finance Bureau", new ArrayList<BLENMessage>());
+    message_dictionary.put("Education Bureau", new ArrayList<BLENMessage>());
+    message_dictionary.put("Health Bureau", new ArrayList<BLENMessage>());
+    message_dictionary.put("Public Security Bureau", new ArrayList<BLENMessage>());
+    message_dictionary.put("Environmental Bureau", new ArrayList<BLENMessage>());
+    message_dictionary.put("Cultural Bureau", new ArrayList<BLENMessage>());
+    message_dictionary.put("Others", new ArrayList<BLENMessage>());
     message_dictionary.put("ALL", new ArrayList<BLENMessage>());
 
     rv_message = findViewById(R.id.recycler_view_message);
@@ -328,9 +346,15 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
           getSupportActionBar().setTitle("BLENetwork - " + EmojiName.getName(BLEN_adapter.getID()));
         }
+
         BLEN_adapter.setScheduledScan();
         scheduler.scheduleAtFixedRate(() -> {
-          runOnUiThread(() -> MSRV_adapter.notifyDataSetChanged());
+          runOnUiThread(() -> {
+            MSRV_adapter.notifyDataSetChanged();
+            Spinner spinner_select = findViewById(R.id.spinner_select);
+            String selection = spinner_select.getSelectedItem().toString();
+            changeSumText(selection);
+          });
         }, 5, 5, TimeUnit.SECONDS);
       }
 
@@ -369,6 +393,7 @@ public class MainActivity extends AppCompatActivity {
         listForSpinner = List.of(getResources().getStringArray(R.array.type_all));
         String selection = listForSpinner.get(pos);
         rv_message.setAdapter(MSRV_adapter = new MSRVAdapter(message_dictionary.get(selection)));
+        changeSumText(selection);
       }
       @Override
       public void onNothingSelected(AdapterView<?> parent) {

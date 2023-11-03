@@ -29,6 +29,7 @@ import java.util.Random;
 
 class MessageViewHolder extends RecyclerView.ViewHolder {
   TextView content, sender, time, type;
+  String department;
   CardView container;
 
   Map<String, Integer> menuMap = new HashMap<String, Integer>();
@@ -99,15 +100,16 @@ class MessageViewHolder extends RecyclerView.ViewHolder {
               .setPositiveButton("Send", (dialogInterface, i) -> {
                 String message_text = ((EditText)dialog_view.findViewById(R.id.message_text)).getText().toString();
                 //String message_type = ((Spinner)dialog_view.findViewById(R.id.spinner_rank)).getSelectedItem().toString();
+                String department = this.department;
                 String message_type = "Reply to : " + this.type.getText() + this.content.getText();
                 String display_type = "MESSAGE";
                 if (send_as_verified[0]) {
                   BLEN_adapter.broadcastVerifiedMessage(
-                          display_type + "_" +
+                          display_type + "_" + department + "/" +
                                   message_type + "\n" + message_text);
                 } else {
                   BLEN_adapter.broadcastMessage(
-                          display_type + "_" +
+                          display_type + "_" +  department + "/" +
                                   message_type + "\n" + message_text);
                 }
               })
@@ -123,10 +125,11 @@ class MessageViewHolder extends RecyclerView.ViewHolder {
       return;
     }
     String display_type = "NULL";
-    String message_type = "Reply to : " + this.type.getText() + this.content.getText() ;
+    String department = "NULL";
+    String message_type = "Reply to : " + this.type.getText() + "·" + this.content.getText() ;
     String message_text = "Completed";
     BLEN_adapter.broadcastVerifiedMessage(
-            display_type + "_" + message_type + "\n" + message_text);
+            display_type + "_" + department + "/" + message_type + "\n" + message_text);
   }
 
   public void setClick(boolean flag){
@@ -163,6 +166,7 @@ public class MSRVAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     holder.content.setText(text);
     holder.sender.setText(EmojiName.getName(message.sender_uuid));
     holder.type.setText(type);
+    holder.department = message.getTextDepartment();
 
     holder.setClickListener();
 

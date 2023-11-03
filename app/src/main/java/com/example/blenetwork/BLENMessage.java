@@ -1,5 +1,7 @@
 package com.example.blenetwork;
 
+import android.util.Log;
+
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
@@ -83,7 +85,7 @@ class BLENMessage {
     String text = new String(this.payload, StandardCharsets.UTF_8);
     String type = "MESSAGE";
     int pivot = 0;
-    while (pivot < text.length() && text.charAt(pivot) != '_') {
+    while (pivot < text.length() && text.charAt(pivot) != '/') {
       pivot += 1;
     }
     pivot += 1;
@@ -92,6 +94,27 @@ class BLENMessage {
     }
     else
       return text = text.substring(pivot);
+  }
+  public String getTextDepartment(){
+    String text = new String(this.payload, StandardCharsets.UTF_8);
+    String department = "";
+    int pivot1 = 0;
+    while (pivot1 < text.length() && text.charAt(pivot1) != '_') {
+      pivot1 += 1;
+    }
+    pivot1 += 1;
+    int pivot2 = pivot1;
+    while (pivot2 < text.length() && text.charAt(pivot2) != '/') {
+    //  Log.d("depart", String.valueOf(text.charAt(pivot2)));
+      pivot2 += 1;
+    }
+    //pivot2 += 1;
+    Log.d("depart", text.substring(pivot1, pivot2));
+    if (pivot2 >= text.length()){
+      return department;
+    }
+    else
+      return text = text.substring(pivot1, pivot2);
   }
 
   public boolean isVerified() {

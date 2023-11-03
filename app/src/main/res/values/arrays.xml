@@ -21,9 +21,25 @@
     </string-array>
     <string-array name="type_all">
         <item>ALL</item>
-        <item>MESSAGE</item>
-        <item>SURVEY</item>
-        <item>RANK</item>
-        <item>ALERT</item>
+        <item>Mayor\'s Office</item>
+        <item>City Council</item>
+        <item>Finance Bureau</item>
+        <item>Education Bureau</item>
+        <item>Health Bureau</item>
+        <item>Public Security Bureau</item>
+        <item>Environmental Bureau</item>
+        <item>Cultural Bureau</item>
+        <item>Others</item>
+    </string-array>
+    <string-array name="department">
+        <item>Mayor\'s Office</item>
+        <item>City Council</item>
+        <item>Finance Bureau</item>
+        <item>Education Bureau</item>
+        <item>Health Bureau</item>
+        <item>Public Security Bureau</item>
+        <item>Environmental Bureau</item>
+        <item>Cultural Bureau</item>
+        <item>Others</item>
     </string-array>
 </resources>
