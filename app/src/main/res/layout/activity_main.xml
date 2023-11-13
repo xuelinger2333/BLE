@@ -44,6 +44,20 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
+  <Spinner
+      android:id="@+id/spinner_select_type"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="8dp"
+      android:entries="@array/display_type_all"
+      android:prompt="@string/select_type"
+      android:spinnerMode="dialog"
+      android:text="Display"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/spinner_select"
+      tools:layout_constraintTop_toBottomOf="@id/spinner_select" />
+
   <TextView
       android:id="@+id/sum_message"
       android:layout_width="wrap_content"
@@ -119,7 +133,7 @@
       android:id="@+id/recycler_view_message"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginTop="60dp"
+      android:layout_marginTop="90dp"
       android:layout_marginBottom="70dp"
       android:scrollbars="vertical"
       app:layoutManager="LinearLayoutManager"

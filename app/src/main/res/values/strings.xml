@@ -13,6 +13,9 @@
   <string name="select_type">Select Type </string>
   <string name="alert_title">Emergency Message </string>
 
+  <string name="survey_options">Options </string>
+
+
   <string name="title_activity_console">ConsoleActivity</string>
   <string name="refresh">Refresh</string>
   <string name="no_device_found">No device found</string>

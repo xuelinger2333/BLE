@@ -389,7 +389,7 @@ public class BLENAdapter {
   }
 
   // Broadcasts a message to all nearby devices, appending certificate and signature
-  public BLENMessage broadcastVerifiedMessage(String mes) {
+  public BLENMessage  broadcastVerifiedMessage(String mes) {
     final int mesRID = new Random().nextInt();
     BLENMessage message = new BLENMessage(mesRID, device_RID, mes);
     message.addSignature(cert, key.priv_key);

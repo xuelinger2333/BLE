@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="data">
-        <item>Social Service</item>
-        <item>F&amp;B service</item>
-        <item>Transportation</item>
-        <item>Sanitation</item>
-        <item>Infrastructure</item>
-        <item>Environment</item>
+<!--        <item>Social Service</item>-->
+<!--        <item>F&amp;B service</item>-->
+<!--        <item>Transportation</item>-->
+<!--        <item>Sanitation</item>-->
+<!--        <item>Infrastructure</item>-->
+<!--        <item>Environment</item>-->
+<!--        <item>Rating</item>-->
+<!--        <item>Survey_num</item>-->
+<!--        <item>Survey_word</item>-->
+        <item>Complain</item>
+        <item>Feedback</item>
+        <item>Urgent</item>
+        <item>Rating</item>
+        <item>Survey_num</item>
+        <item>Survey_word</item>
         <item>Others</item>
         <item> </item>
     </string-array>
     <string-array name="type_user">
         <item>MESSAGE</item>
+        <item>RANK</item>
     </string-array>
     <string-array name="type_admin">
         <item>MESSAGE</item>
         <item>SURVEY</item>
+        <item>SURVEYWORD</item>
         <item>RANK</item>
         <item>ALERT</item>
     </string-array>
@@ -23,23 +34,49 @@
         <item>ALL</item>
         <item>Mayor\'s Office</item>
         <item>City Council</item>
-        <item>Finance Bureau</item>
-        <item>Education Bureau</item>
-        <item>Health Bureau</item>
-        <item>Public Security Bureau</item>
-        <item>Environmental Bureau</item>
-        <item>Cultural Bureau</item>
         <item>Others</item>
+    </string-array>
+    <string-array name="display_type_all">
+        <item>ALL</item>
+        <item>MESSAGE</item>
+        <item>RANK</item>
+        <item>SURVEY</item>
+        <item>SURVEYWORD</item>
+        <item>ALERT</item>
+        <item> </item>
     </string-array>
     <string-array name="department">
         <item>Mayor\'s Office</item>
         <item>City Council</item>
-        <item>Finance Bureau</item>
-        <item>Education Bureau</item>
-        <item>Health Bureau</item>
-        <item>Public Security Bureau</item>
-        <item>Environmental Bureau</item>
-        <item>Cultural Bureau</item>
         <item>Others</item>
+    </string-array>
+    <string-array name="type_survey_word">
+        <item> </item>
+        <item>VERY_GOOD</item>
+        <item>GOOD</item>
+        <item>NORMAL</item>
+        <item>BAD</item>
+    </string-array>
+
+    <string-array name="type_game">
+        <item> </item>
+        <item>roller_coaster</item>
+        <item>carousel</item>
+        <item>kart_racing</item>
+    </string-array>
+
+    <string-array name="game_score">
+        <item> </item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+
     </string-array>
 </resources>
